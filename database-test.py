@@ -33,8 +33,10 @@ db = firebase.database()
 # db.child("Data").child("check").update(data)
 
 # data = {'email': ['check1', 'check2', 'check3']}
-print(list(db.child("Aadhar").get().val().values()))
-
+# print(list(db.child("Aadhar").get().val().values()))
+# email = 'user1@gmail.com'
+# print(db.child("Data").child(email.split(
+#     '@')[0]).child("Username").get().val())
 # email = "user1@gmail.com"
 # password = "password"
 
@@ -47,3 +49,15 @@ print(list(db.child("Aadhar").get().val().values()))
 #   print(details.key())
 #   if details.key() == "Mwg6KdEDE3GC9ysKqb0":
 #     db.child("Data").child(details.key()).child("email").update("Test")
+
+
+# data = {"vehicle_name": "Swift Desire", "seats": 4, "quantity": 5, "pkm": 12}
+# db.child("Vehicles").push(data)
+
+# db.child("Users").push('user1')
+
+# print(list(db.child("Admin Mail").get().val()))
+
+
+db.child("Vehicles").child(
+    '-NGYDTZzYfEe1E0Y3_iF').update({"quantity": 10})

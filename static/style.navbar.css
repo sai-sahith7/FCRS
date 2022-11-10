@@ -27,6 +27,8 @@ nav .content{
 nav .content .links{
   margin-left: 80px;
   display: flex;
+  justify-content: end;
+  align-items: flex-end;
 }
 .content .logo a{
   color: #fff;
