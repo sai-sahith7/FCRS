@@ -56,9 +56,9 @@
           <span></span>
           <label>Aadhaar Number</label>
       </div>
-      <input type="number" hidden name="date" value="1">
-      <input type="number" hidden name="month" value="1">
-      <input type="number" hidden name="year" value="1">
+      <input type="number" hidden id="date" name="date" value="1">
+      <input type="number" hidden id="month" name="month" value="1">
+      <input type="number" hidden id="year" name="year" value="1">
         <a href="{{ url_for('login') }}"><button type="submit" class="btn">Submit</button></a>
         <h3 style="color: red;text-align:center;" >{{ error_msg }}</h3>
       </form>

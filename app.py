@@ -33,7 +33,9 @@ def logout():
 
 @app.route('/home')
 def home():
-    return render_template('home.html')
+    if session.get('logged_in'):
+        return render_template('home.html')
+    return redirect(url_for('index'))
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -42,7 +44,6 @@ def login():
     if request.method == 'POST':
         email = str(request.form['email'])
         password = str(request.form['password'])
-        print(email, password)
         try:
             session['email'] = email
             session['logged_in'] = True
@@ -66,17 +67,18 @@ def signup():
         aadhaar = int(request.form['aadhaar'])
         date, month, year = int(request.form['date']), int(
             request.form['month']), int(request.form['year'])
+        print(date, month, year)
         if email.count('@') != 1:
             error_msg = "Invalid Email. Try Again."
         elif password != confirm_pass:
             error_msg = "Passwords do not match. Try Again."
-        elif int(dob.split('-')[0]) < year-18:
+        elif int(dob.split('-')[0]) > year-18:
             error_msg = "You must be 18 years or older to register."
         elif int(dob.split('-')[0]) == year-18:
-            if int(dob.split('-')[1]) < month:
+            if int(dob.split('-')[1]) > month:
                 error_msg = "You must be 18 years or older to register."
             elif int(dob.split('-')[1]) == month:
-                if int(dob.split('-')[2]) < date:
+                if int(dob.split('-')[2]) > date:
                     error_msg = "You must be 18 years or older to register."
         elif len(dl) != 15 or (dl[:2].isalpha() is False) or (dl[2:].isdigit() is False):
             error_msg = "Invalid Driving License Number. Try Again."
@@ -100,6 +102,57 @@ def signup():
             except:
                 error_msg = "Email already registered. Try Again."
     return render_template('signup.html', error_msg=error_msg)
+
+
+@app.route('/booking-details', methods=['GET', 'POST'])
+def booking_details():
+    error_msg = ""
+    if request.method == 'POST':
+        date = str(request.form['date'])
+        hour = str(request.form['hour'])
+        minute = str(request.form['minute'])
+        pickup = str(request.form['from'])
+        ampm = str(request.form['AMPM'])
+        drop = str(request.form['to'])
+        current_date = int(request.form['date1'])
+        current_month = int(request.form['month'])
+        current_year = int(request.form['year'])
+        if int(date.split('-')[0]) < current_year:
+            error_msg = "Invalid Date. Try Again."
+        elif int(date.split('-')[0]) == current_year:
+            if int(date.split('-')[1]) < current_month:
+                error_msg = "Invalid Date. Try Again."
+            elif int(date.split('-')[1]) == current_month:
+                if int(date.split('-')[2]) < current_date:
+                    error_msg = "Invalid Date. Try Again."
+        if error_msg == "":
+            data = {"Date": date, "Hour": hour, "Minute": minute,
+                    "Pickup": pickup, "AMPM": ampm, "Drop": drop}
+            db.child("Data").child(session['email'].split(
+                '@')[0]).child("Booking").push(data)
+            print(data)
+        else:
+            return render_template('home.html', error_msg=error_msg)
+        return "yess"
+        return render_template('vehicle selection.html', booking_details=booking_details)
+    return redirect(url_for('home'))
+
+
+@app.route('/vehicle-selection', methods=['GET', 'POST'])
+def vehicle_selection():
+    if request.method == 'POST':
+        vehicle_id = str(request.form['vehicle'])
+        date = str(request.form['date'])
+        time = str(request.form['time'])
+        pickup = str(request.form['pickup'])
+        drop = str(request.form['drop'])
+        data = {"Date": date, "Time": time, "Pickup": pickup,
+                "Drop": drop, "Vehicle": vehicle_id}
+        db.child("Data").child(session['email'].split(
+            '@')[0]).child("Booking").push(data)
+        # return render_template('payment.html', vehicle=vehicle)
+        return "yess"
+    return redirect(url_for('home'))
 
 
 if __name__ == '__main__':
