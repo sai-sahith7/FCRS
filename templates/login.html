@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Login| FCRS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.login.css') }}">
+  </head>
+  <body>
+    <div class="center">
+        <h1>Login</h1>
+      <form action="/login" method="post">
+        <div class="txt_field">
+          <input name="email" type="text" required>
+          <span></span>
+          <label>Email ID</label>
+        </div>
+        <div class="txt_field">
+          <input name="password" type="password" required>
+          <span></span>
+          <label>Password</label>
+        </div>
+        <div class="pass">Forgot Password?</div>
+        <a type="submit" href="{{ url_for('login') }}"><input type="submit"></a>
+        <div class="signup_link">
+          <a href="{{ url_for('signup') }}">Signup</a>
+        </div>
+      </form>
+      <h3 style="color: red;text-align:center;" >{{ error_msg }}</h3>
+    </div>
+  </body>
+</html>

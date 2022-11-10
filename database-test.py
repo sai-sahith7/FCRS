@@ -32,8 +32,13 @@ db = firebase.database()
 #         "Food details": "Test", "Donor mail": "Test", "Distributor mail": "Test"}
 # db.child("Data").child("check").update(data)
 
-data = {'email': ['check1', 'check2', 'check3']}
-db.child("Admin details").update(data)
+# data = {'email': ['check1', 'check2', 'check3']}
+print(list(db.child("Aadhar").get().val().values()))
+
+# email = "user1@gmail.com"
+# password = "password"
+
+# auth.sign_in_with_email_and_password(email, password)
 
 # db.child("Data").child("-Mwg6KdEDE3GC9ysKqb0").update({"email":"Test"})
 

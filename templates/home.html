@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.clock.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.omg.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.navbar.css') }}">
+</head>
+<body>
+        <div class="wrapper">
+          <nav>
+            <input type="checkbox" id="show-search">
+            <input type="checkbox" id="show-menu">
+            <label for="show-menu" class="menu-icon"><i class="fas fa-bars"></i></label>
+            <div class="content">
+            <div class="logo"><img src = "logo.png"><a>FCRS</a></div>
+              <ul class="links">
+                <li><a href="index.home.html">Home</a></li>
+                <li><a href="index.hist.html">Booking History</a></li>
+                <li><a href="index.acc.html">Manage Account</a></li>
+                <li><a href="index.contact.html">Contact Us</a></li>
+                <li><a href="index.faq.html">FAQ's</a></li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+        <div class="center">
+          <form method="post">
+            <div class="txt_field">
+              <input type="text" required>
+              <span></span>
+              <label>Date</label>
+            </div>
+            <div class="txt_field">
+                <input type="text" required>
+                <span></span>
+                <label>Time</label>
+            </div>
+            <div class="txt_field">
+              <input type="text" required>
+              <span></span>
+              <label>Pickup</label>
+            </div>
+            <div class="txt_field">
+              <input type="text" required>
+              <span></span>
+              <label>Dropoff</label>
+            </div>
+            <button type="submit" class="btn"><a href="index.cards.html">Book a ride</a></button>
+          </form>
+        </div>
+      <div class="box">
+        <div id="clockContainer">
+            <div id="hour"></div>
+            <div id="minute"></div>
+            <div id="second"></div>
+        </div>
+        <div id="calendarContainer">
+            <div id="dycalendar"></div>
+        </div>
+        <div class="form"></div>
+      </div>
+    <script src="script.clock.js"></script>
+    <script src="script.omg.js"></script>
+    <script>
+        dycalendar.draw({
+            target: '#dycalendar',
+            type: 'month',
+            dayformat: 'full',
+            monthformat: 'full',
+            highlighttargetdate: true,
+            prevnextbutton: 'show'
+        })
+    </script>
+</body>
+</html>
