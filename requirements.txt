@@ -86,7 +86,6 @@ pyOpenSSL==22.0.0
 pyparsing==3.0.7
 pyperclip==1.8.2
 pypng==0.0.21
-PyQRCode==1.2.1
 Pyrebase==3.0.27
 PyRect==0.1.4
 PyScreeze==0.1.28
@@ -95,7 +94,6 @@ pytest==7.2.0
 python-dateutil==2.8.2
 python-jwt==2.0.1
 pytweening==1.0.4
-pytz==2022.1
 pywin32==304
 pyzmq==23.2.0
 requests==2.11.1
