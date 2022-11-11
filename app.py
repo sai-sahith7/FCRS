@@ -243,6 +243,10 @@ def booking_history():
         session['email'].split('@')[0]).child("km").get().val()
     pending_payment = db.child("Data").child(
         session['email'].split('@')[0]).child("pending").get().val()
+    for i in bookings:
+        if i['Amount to be paid'] == 0:
+            i['Amount to be paid'] = str(
+                dict(db.child("Vehicles").child(i['Vehicle']).get().val())['pkm'])+' per km'
     return render_template('booking history.html', bookings=bookings, customers=customers, bookings_count=bookings_count, kms_count=kms_count, pending_payment=pending_payment)
 
 
