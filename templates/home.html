@@ -35,31 +35,31 @@
         <h1>00:00:00 PM</h1>
         <div class="fill">
           <div class="column">
-            <select name="hour">
+            <select name="hour" required>
               <option value="Hour" selected disabled hidden>Hour</option>
             </select>
           </div>
           <div class="column">
-            <select name="minute">
+            <select name="minute" required>
               <option value="Minute" selected disabled hidden>Minute</option>
             </select>
           </div>
           <div class="column">
-            <select name="AMPM">
+            <select name="AMPM" required>
               <option value="AM/PM" selected disabled hidden>AM/PM</option>
             </select>
           </div>
           </div>
         </div>
-        <input type="date" name="date">
+        <input type="date" name="date" required>
         <div class="search">
-          <input type="text" placeholder="From..." name="from">
-          <input type="text" placeholder="To..." name="to">
+          <input type="text" placeholder="From..." name="from" required>
+          <input type="text" placeholder="To..." name="to" required>
           <input type="number" hidden id="date1" name="date1" value="1">
           <input type="number" hidden id="month" name="month" value="1">
           <input type="number" hidden id="year" name="year" value="1">
         </div> 
-        <a type="submit" href="index.cards.html"><input type="submit" value="Get a Ride" class="btn"></a>
+        <a type="submit" href=""><input type="submit" value="Get a Ride" class="btn"></a>
         <h3 style="color: red;text-align:center;" >{{ error_msg }}</h3>
       </div> 
       </form>   
