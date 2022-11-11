@@ -36,11 +36,11 @@
 					<h2>Rupees {{ vehicle['pkm'] }} per km</h2>
 					<form action="/vehicle-selection" method="POST">
 						<input hidden type="text" name="vehicle_id" value="{{ vehicle['vehicle_id'] }}">
-						<input type="text" name="date" val="{{ booking_details['Date'] }}" hidden >
-						<input type="text" name="time" val="{{ booking_details['Time'] }}" hidden >
-						<input type="text" name="pickup" val="{{ booking_details['Pickup'] }}" hidden >
-						<input type="text" name="drop" val="{{ booking_details['Drop'] }}" hidden >
-						<input type="text" name="vehicle_name" val="{{ vehicle['vehicle_name'] }}" hidden >
+						<input type="text" name="date" value="{{ booking_details['Date'] }}" hidden >
+						<input type="text" name="time" value="{{ booking_details['Time'] }}" hidden >
+						<input type="text" name="pickup" value="{{ booking_details['Pickup'] }}" hidden >
+						<input type="text" name="drop" value="{{ booking_details['Drop'] }}" hidden >
+						<input type="text" name="vehicle_name" value="{{ vehicle['vehicle_name'] }}" hidden >
 						<input type="submit" value="Book Now">
 					</form>
 				</div>

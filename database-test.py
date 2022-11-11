@@ -59,5 +59,8 @@ db = firebase.database()
 # print(list(db.child("Admin Mail").get().val()))
 
 
-db.child("Vehicles").child(
-    '-NGYDTZzYfEe1E0Y3_iF').update({"quantity": 10})
+# db.child("Vehicles").child(
+#     '-NGYDTZzYfEe1E0Y3_iF').update({"quantity": 10})
+email = 'user1@gmail.com'
+print(db.child("Data").child(email.split(
+    '@')[0]).child("bookings").get().val())

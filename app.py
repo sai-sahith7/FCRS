@@ -164,10 +164,13 @@ def booking_details():
                 if int(date.split('-')[2]) < current_date:
                     error_msg = "Invalid Date. Try Again."
         if error_msg == "":
-            data = {"Date": date, "Time": hour+':'+minute+' '+ampm,
-                    "Pickup": pickup, "Drop": drop}
+            booking_details = {"Date": date, "Time": hour+':'+minute+' '+ampm,
+                               "Pickup": pickup, "Drop": drop}
             vehicles = get_vehicle_info()
-            return render_template('vehicle selection.html', booking_details=data, vehicles=vehicles)
+            for vehicle in vehicles:
+                if vehicle['quantity'] == 0:
+                    vehicles.remove(vehicle)
+            return render_template('vehicle selection.html', booking_details=booking_details, vehicles=vehicles)
         else:
             return render_template('home.html', error_msg=error_msg)
 
@@ -184,14 +187,16 @@ def vehicle_selection():
         drop = str(request.form['drop'])
         vehicle_name = str(request.form['vehicle_name'])
         print('vehicle_id', vehicle_id)
-        # quant = db.child("Vehicles").child(
-        #     vehicle_id).child("quantity").get().val()
-        # db.child("Vehicles").child(vehicle_id).update(
-        #     {"quantity": quant-1})
+        quant = db.child("Vehicles").child(
+            vehicle_id).child("quantity").get().val()
+        db.child("Vehicles").child(vehicle_id).update(
+            {"quantity": quant-1})
         data = {"Date": date, "Time": time, 'email': session['email'], "Pickup": pickup, 'name': session['uname'],
-                "Drop": drop, "Vehicle": vehicle_id, "Status": "Booked", 'vehicle_name': vehicle_name, "Amount to be paid": 0}
-        # db.child("Data").child(session['email'].split(
-        #     '@')[0]).update({"bookings": db.child("Data").child(session['email'].split('@')[0]).child("bookings").get().val()+1})
+                "Drop": drop, "Vehicle": vehicle_id, "Status": "Booked", 'vehicle_name': vehicle_name, "Amount to be paid": 0, "km": 0}
+        bookings = int(db.child("Data").child(
+            session['email'].split('@')[0]).child("bookings").get().val())
+        db.child("Data").child(session['email'].split(
+            '@')[0]).update({"bookings": bookings+1})
         db.child("Bookings").push(data)
         return redirect(url_for('booking_history'))
     return redirect(url_for('home'))
@@ -210,6 +215,70 @@ def booking_history():
     pending_payment = db.child("Data").child(
         session['email'].split('@')[0]).child("pending").get().val()
     return render_template('booking history.html', bookings=bookings, customers=customers, bookings_count=bookings_count, kms_count=kms_count, pending_payment=pending_payment)
+
+
+@app.route('/manage-bookings', methods=['GET', 'POST'])
+def manage_bookings():
+    if session.get('logged_in'):
+        if session.get('admin'):
+            booking_invoice = get_booking_invoice()
+            payment_invoice = get_payment_invoice()
+            paid_invoice = get_paid_invoice()
+            return render_template('manage bookings.html', booking_invoice=booking_invoice, payment_invoice=payment_invoice, paid_invoice=paid_invoice)
+        return redirect(url_for('home'))
+    return redirect(url_for('index'))
+
+
+@app.route('/booking-invoice', methods=['GET', 'POST'])
+def booking_invoice():
+    if session.get('logged_in'):
+        if session.get('admin'):
+            if request.method == 'POST':
+                booking_id = str(request.form['booking_id'])
+                vehicle_id = str(request.form['vehicle_id'])
+                mail = str(request.form['email']).split('@')[0]
+                km = int(request.form['km'])
+                amount = km * (int(db.child("Vehicles").child(
+                    vehicle_id).child("pkm").get().val()))
+                db.child("Bookings").child(booking_id).update(
+                    {"Amount to be paid": amount, "km": km})
+                get_amount = int(db.child("Data").child(
+                    mail).child("pending").get().val()) + amount
+                db.child("Data").child(mail).update(
+                    {"pending": get_amount})
+                get_km = int(db.child("Data").child(
+                    mail).child("km").get().val()) + km
+                db.child("Data").child(mail).update({"km": get_km})
+                quant = db.child("Vehicles").child(
+                    vehicle_id).child("quantity").get().val()
+                db.child("Vehicles").child(vehicle_id).update(
+                    {"quantity": quant+1})
+                db.child("Bookings").child(booking_id).update(
+                    {"Status": "Payment Pending"})
+                return redirect(url_for('manage_bookings'))
+            return redirect(url_for('manage_bookings'))
+        return redirect(url_for('home'))
+    return redirect(url_for('index'))
+
+
+@app.route('/payment-invoice', methods=['GET', 'POST'])
+def payment_invoice():
+    if session.get('logged_in'):
+        if session.get('admin'):
+            if request.method == 'POST':
+                booking_id = str(request.form['booking_id'])
+                mail = str(request.form['email']).split('@')[0]
+                amount = int(request.form['amount'])
+                get_amount = int(db.child("Data").child(
+                    mail).child("pending").get().val()) - amount
+                db.child("Data").child(mail).update(
+                    {"pending": get_amount})
+                db.child("Bookings").child(booking_id).update(
+                    {"Status": "Paid"})
+                return redirect(url_for('manage_bookings'))
+            return redirect(url_for('manage_bookings'))
+        return redirect(url_for('home'))
+    return redirect(url_for('index'))
 
 
 def get_personal_bookings(mail):
@@ -238,9 +307,44 @@ def get_vehicle_info():
         for vehicle in vehicles:
             temp = dict(vehicles[vehicle])
             temp['vehicle_id'] = vehicle
-            print(temp)
             vehicle_list.append(temp)
     return vehicle_list
+
+
+def get_booking_invoice():
+    bookings = db.child("Bookings").get().val()
+    bookings_list = []
+    if bookings is not None:
+        for booking in bookings:
+            if bookings[booking]['Status'] == "Booked":
+                temp = dict(bookings[booking])
+                temp['booking_id'] = booking
+                bookings_list.append(temp)
+    return bookings_list
+
+
+def get_payment_invoice():
+    bookings = db.child("Bookings").get().val()
+    bookings_list = []
+    if bookings is not None:
+        for booking in bookings:
+            if bookings[booking]['Status'] == "Payment Pending":
+                temp = dict(bookings[booking])
+                temp['booking_id'] = booking
+                bookings_list.append(temp)
+    return bookings_list
+
+
+def get_paid_invoice():
+    bookings = db.child("Bookings").get().val()
+    bookings_list = []
+    if bookings is not None:
+        for booking in bookings:
+            if bookings[booking]['Status'] == "Paid":
+                temp = dict(bookings[booking])
+                temp['booking_id'] = booking
+                bookings_list.append(temp)
+    return bookings_list
 
 
 if __name__ == '__main__':
