@@ -79,7 +79,6 @@ def signup():
         aadhaar = int(request.form['aadhaar'])
         date, month, year = int(request.form['date']), int(
             request.form['month']), int(request.form['year'])
-        print(date, month, year)
         if email.count('@') != 1:
             error_msg = "Invalid Email. Try Again."
         elif password != confirm_pass:
@@ -161,7 +160,6 @@ def manage_vehicles():
                 if vehicle_id == 'None':
                     db.child("Vehicles").push(data)
                 else:
-                    print(vehicle_id)
                     db.child("Vehicles").child(vehicle_id).update(data)
                 return redirect(url_for('admin'))
             customers = get_customer_list()
@@ -215,7 +213,6 @@ def vehicle_selection():
         pickup = str(request.form['pickup'])
         drop = str(request.form['drop'])
         vehicle_name = str(request.form['vehicle_name'])
-        print('vehicle_id', vehicle_id)
         quant = db.child("Vehicles").child(
             vehicle_id).child("quantity").get().val()
         db.child("Vehicles").child(vehicle_id).update(
