@@ -86,7 +86,7 @@ pyOpenSSL==22.0.0
 pyparsing==3.0.7
 pyperclip==1.8.2
 pypng==0.0.21
-Pyrebase==3.0.27
+Pyrebase4==4.5.0
 PyRect==0.1.4
 PyScreeze==0.1.28
 PySocks==1.7.1
