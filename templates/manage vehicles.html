@@ -42,7 +42,7 @@
 						</thead>
 						<tbody>
 							{% for vehicle in vehicles %}
-							<form action="/admin" method="POST">
+							<form action="/manage-vehicles" method="POST">
 								<tr>
 									<td><input type="text" name = "name" value="{{ vehicle['vehicle_name'] }}" ></td>
 									<td><input type="number" name = "pkm" value="{{ vehicle['pkm'] }}" ></td>
@@ -53,7 +53,7 @@
 								</tr>
 							</form>
 							{% endfor %}
-							<form action="/admin" method="POST">
+							<form action="/manage-vehicles" method="POST">
 								<tr>
 									<td><input type="text" name = "name" ></td>
 									<td><input type="number" name = "pkm" ></td>
