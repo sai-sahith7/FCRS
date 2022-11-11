@@ -18,11 +18,8 @@
         <div class="content">
         <div class="logo"><img src = "{{ url_for('static', filename='logo.png') }}"><a>FCRS</a></div>
           <ul class="links">
-            <li><a href="index.home.html">Home</a></li>
-            <li><a href="index.hist.html">Booking History</a></li>
-            <li><a href="index.manage.html">Manage Account</a></li>
-            <li><a href="index.contact.html">Contact Us</a></li>
-            <li><a href="index.faq.html">FAQ's</a></li>
+            <li><a href="{{ url_for('login') }}">Login</a></li>
+            <li><a href="{{ url_for('signup') }}">Signup</a></li>
           </ul>
         </div>
       </nav>

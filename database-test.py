@@ -61,6 +61,13 @@ db = firebase.database()
 
 # db.child("Vehicles").child(
 #     '-NGYDTZzYfEe1E0Y3_iF').update({"quantity": 10})
-email = 'user1@gmail.com'
-print(db.child("Data").child(email.split(
-    '@')[0]).child("bookings").get().val())
+# email = 'user1@gmail.com'
+# print(db.child("Data").child(email.split(
+#     '@')[0]).child("bookings").get().val())
+
+# vehicle_count = 0
+# vehicles = db.child("Vehicles").get().val()
+# for vehicle in vehicles:
+#     vehicle_count = vehicle_count + int(db.child("Vehicles").child(vehicle).child("quantity").get().val())
+
+# print(vehicle_count)

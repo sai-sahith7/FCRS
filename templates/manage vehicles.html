@@ -17,90 +17,53 @@
             <ul class="links">
               <li><a href="{{ url_for('admin') }}">Dashboard</a></li>
               <li><a href="{{ url_for('manage_bookings') }}">Manage Bookings</a></li>
-              <li><a href="{{ url_for('manage_vehicles') }}">Manage Vehicles</a></li>
+              <li><a href="{{ url_for('manage_vehicles') }}">Manage Account</a></li>
               <li><a href="{{ url_for('logout') }}">Sign Out</a></li>
             </ul>
           </div>
         </nav>
       </div>
 	<div class="container">
-		<div class="main">
-			<div class="cardBox">
-				<div class="card">
-					<div>
-						<div class="numbers">{{ book_count }}</div>
-						<div class="cardName">Bookings</div>
-					</div>
-					<div class="iconBx">
-						<ion-icon name="book-outline"></ion-icon>
-					</div>
-				</div>
-				<div class="card">
-					<div>
-						<div class="numbers">{{ Payments_Pending }}</div>
-						<div class="cardName">Pending Payments</div>
-					</div>
-					<div class="iconBx">
-						<ion-icon name="search-outline"></ion-icon>
-					</div>
-				</div>
-				<div class="card">
-					<div>
-						<div class="numbers">{{ vehicle_count }}</div>
-						<div class="cardName">Garage</div>
-					</div>
-					<div class="iconBx">
-						<ion-icon name="car-outline"></ion-icon>
-					</div>
-				</div>
-				<div class="card">
-					<div>
-						<div class="numbers">₹{{ amount_collected }}</div>
-						<div class="cardName">Revenue</div>
-					</div>
-					<div class="iconBx">
-						<ion-icon name="cash-outline"></ion-icon>
-					</div>
-				</div>
-			</div>			
+		<div class="main">	
 			<div class="details">
 				<div class="recentOrders">
 					<div class="cardHeader">
-						<h2>Recent Orders</h2>
+						<h2>Manage Vehicles</h2>
 					</div>
 					<table>
 						<thead>
 							<tr>
-								<td>Name</td>
-								<td>Pickup</td>
-								<td>Drop</td>
-								<td>Date</td>
-                                <td>Time</td>
-								<td>Status</td>
+								<td>Vehicle Name</td>
+								<td>Price per Km</td>
+								<td>Quantity</td>
+                                <td>Number of seats</td>
+								<td>Action</td>
 							</tr>
 						</thead>
 						<tbody>
-							{% for booking in all_bookings %}
-							<tr>
-								<td>{{ booking['name'] }}</td>
-                                <td>{{ booking['Pickup'] }}</td>
-								<td>{{ booking['Drop'] }}</td>
-								<td>{{ booking['Date'] }}</td>
-								<td>{{ booking['Time'] }}</td>
-								<td><span class="status delivering">{{ booking['Status'] }}</span></td>
-							</tr>
+							{% for vehicle in vehicles %}
+							<form action="/admin" method="POST">
+								<tr>
+									<td><input type="text" name = "name" value="{{ vehicle['vehicle_name'] }}" ></td>
+									<td><input type="number" name = "pkm" value="{{ vehicle['pkm'] }}" ></td>
+									<td><input type="number" name="quantity" value="{{ vehicle['quantity'] }}" ></td>
+									<td><input type="number" name="seats" value="{{ vehicle['seats'] }}" ></td>
+									<input type="text" name = "vehicle_id" value = "{{ vehicle['vehicle_id'] }}" hidden>
+									<td><input type="submit" value="Update" ></td>
+								</tr>
+							</form>
 							{% endfor %}
+							<form action="/admin" method="POST">
+								<tr>
+									<td><input type="text" name = "name" ></td>
+									<td><input type="number" name = "pkm" ></td>
+									<td><input type="number" name="quantity" ></td>
+									<td><input type="number" name="seats" ></td>
+									<input type="text" name = "vehicle_id" value = "None" hidden >
+									<td><input type="submit" value="Add" ></td>
+								</tr>
+							</form>
 						</tbody>
-					</table>
-				</div>
-				<div class="recentCustomers">
-					<div class="cardHeader">
-						<h2>Recent Customers</h2>
-					</div>
-					<table>
-						{% for customer in customers %}
-						<tr><td><h4>{{ customer }}</h4></td></tr>
-						{% endfor %}
 					</table>
 				</div>
 			</div>

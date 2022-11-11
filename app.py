@@ -36,6 +36,8 @@ def logout():
 @app.route('/home')
 def home():
     if session.get('logged_in'):
+        if session.get('admin'):
+            return redirect(url_for('admin'))
         return render_template('home.html')
     return redirect(url_for('index'))
 
@@ -117,8 +119,35 @@ def signup():
     return render_template('signup.html', error_msg=error_msg)
 
 
-@app.route('/admin', methods=['GET', 'POST'])
+@app.route('/admin')
 def admin():
+    if session.get('logged_in'):
+        if session.get('admin'):
+            book_count = len(db.child("Bookings").get().val())
+            Payments_Pending = 0
+            amount_collected = 0
+            vehicle_count = 0
+            bookings = db.child("Bookings").get().val()
+            for booking in bookings:
+                if bookings[booking]['Status'] == "Payment Pending" or bookings[booking]['Status'] == "Booked":
+                    Payments_Pending = Payments_Pending + 1
+                elif bookings[booking]['Status'] == "Paid":
+                    amount_collected = amount_collected + int(bookings[booking]
+                                                              ['Amount to be paid'])
+            vehicles = db.child("Vehicles").get().val()
+            for vehicle in vehicles:
+                vehicle_count = vehicle_count + \
+                    int(db.child("Vehicles").child(
+                        vehicle).child("quantity").get().val())
+            all_bookings = get_all_bookings()
+            customers = get_customer_list()
+            return render_template('admin index.html', book_count=book_count, Payments_Pending=Payments_Pending, amount_collected=amount_collected, vehicle_count=vehicle_count, all_bookings=all_bookings, customers=customers)
+        return redirect(url_for('home'))
+    return redirect(url_for('index'))
+
+
+@app.route('/manage-vehicles', methods=['GET', 'POST'])
+def manage_vehicles():
     if session.get('logged_in'):
         if session.get('admin'):
             if request.method == 'POST':
@@ -137,7 +166,7 @@ def admin():
                 return redirect(url_for('admin'))
             customers = get_customer_list()
             vehicles = get_vehicle_info()
-            return render_template('admin index.html', customers=customers, vehicles=vehicles)
+            return render_template('manage vehicles.html', customers=customers, vehicles=vehicles)
         return redirect(url_for('home'))
     return redirect(url_for('index'))
 
@@ -281,6 +310,24 @@ def payment_invoice():
     return redirect(url_for('index'))
 
 
+@app.route('/contact')
+def contact():
+    if session.get('logged_in'):
+        if session.get('admin'):
+            return redirect(url_for('admin'))
+        return render_template('contact.html')
+    return redirect(url_for('index'))
+
+
+@app.route('/faq')
+def faq():
+    if session.get('logged_in'):
+        if session.get('admin'):
+            return redirect(url_for('admin'))
+        return render_template('faq.html')
+    return redirect(url_for('index'))
+
+
 def get_personal_bookings(mail):
     bookings = db.child("Bookings").get().val()
     bookings_list = []
@@ -288,6 +335,15 @@ def get_personal_bookings(mail):
         for booking in bookings:
             if bookings[booking]['email'] == mail:
                 bookings_list.append(bookings[booking])
+    return bookings_list
+
+
+def get_all_bookings():
+    bookings = db.child("Bookings").get().val()
+    bookings_list = []
+    if bookings is not None:
+        for booking in bookings:
+            bookings_list.append(bookings[booking])
     return bookings_list
 
 
