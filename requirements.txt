@@ -39,7 +39,7 @@ kiwisolver==1.4.2
 loguru==0.5.3
 MarkupSafe==2.1.1
 nest-asyncio==1.5.5
-oauth2client==3.0.0
+oauth2client==4.1.2
 pycodestyle==2.8.0
 pycparser==2.21
 pycryptodome==3.6.4
